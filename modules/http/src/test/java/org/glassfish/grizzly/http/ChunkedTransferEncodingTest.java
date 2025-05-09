@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
  * Copyright (c) 2011, 2024 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -20,7 +21,6 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.glassfish.grizzly.http.ChunkedTransferEncoding.STRICT_CHUNKED_TRANSFER_CODING_LINE_TERMINATOR_RFC_9112;
 import static org.glassfish.grizzly.http.HttpCodecFilter.DEFAULT_MAX_HTTP_PACKET_HEADER_SIZE;
 import static org.glassfish.grizzly.http.util.MimeHeaders.MAX_NUM_HEADERS_UNBOUNDED;
 import static org.glassfish.grizzly.memory.Buffers.EMPTY_BUFFER;
@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -91,7 +92,7 @@ public class ChunkedTransferEncodingTest {
 
     private final String eol;
     private final boolean isChunkWhenParsing;
-    private final boolean isStrictChunkedTransferCodingLineTerminatorSet;
+    private final boolean isStrictChunkedTransferCodingLineTerminator;
 
     private TCPNIOTransport transport;
     private Connection connection;
@@ -101,7 +102,9 @@ public class ChunkedTransferEncodingTest {
 
     @Parameters
     public static Collection<Object[]> getMode() {
-        return asList(new Object[][] { { "\r\n", FALSE }, { "\r\n", TRUE }, { "\n", FALSE }, { "\n", TRUE } });
+        return asList(new Object[][]{{"\r\n", FALSE, FALSE}, {"\r\n", FALSE, TRUE}, {"\r\n", TRUE, FALSE},
+                                     {"\r\n", TRUE, TRUE}, {"\n", FALSE, FALSE}, {"\n", FALSE, TRUE},
+                                     {"\n", TRUE, FALSE}, {"\n", TRUE, TRUE}});
     }
 
     @Before
@@ -113,8 +116,15 @@ public class ChunkedTransferEncodingTest {
         if (isChunkWhenParsing) {
             filterChainBuilder.add(new ChunkingFilter(2));
         }
+        final Properties props;
+        if (isStrictChunkedTransferCodingLineTerminator) {
+            props = new Properties();
+            props.setProperty(ChunkedTransferEncoding.STRICT_CHUNKED_TRANSFER_CODING_LINE_TERMINATOR_RFC_9112, "true");
+        } else {
+            props = null;
+        }
         HttpServerFilter httpServerFilter = new HttpServerFilter(true, DEFAULT_MAX_HTTP_PACKET_HEADER_SIZE, null, null, null,
-                MAX_NUM_HEADERS_UNBOUNDED, MAX_NUM_HEADERS_UNBOUNDED);
+                MAX_NUM_HEADERS_UNBOUNDED, MAX_NUM_HEADERS_UNBOUNDED, props);
         filterChainBuilder.add(httpServerFilter);
         httpRequestCheckFilter = new HTTPRequestCheckFilter(resultQueue);
         filterChainBuilder.add(httpRequestCheckFilter);
@@ -152,11 +162,10 @@ public class ChunkedTransferEncodingTest {
         }
     }
 
-    public ChunkedTransferEncodingTest(String eol, boolean isChunkWhenParsing) {
+    public ChunkedTransferEncodingTest(String eol, boolean isChunkWhenParsing, boolean isStrictChunkedTransferCodingLineTerminator) {
         this.eol = eol;
         this.isChunkWhenParsing = isChunkWhenParsing;
-        this.isStrictChunkedTransferCodingLineTerminatorSet =
-                Boolean.parseBoolean(System.getProperty(STRICT_CHUNKED_TRANSFER_CODING_LINE_TERMINATOR_RFC_9112));
+        this.isStrictChunkedTransferCodingLineTerminator = isStrictChunkedTransferCodingLineTerminator;
     }
 
     @Test
@@ -307,7 +316,7 @@ public class ChunkedTransferEncodingTest {
         f.get(5, SECONDS);
 
         Future<Boolean> result;
-        if (!isStrictChunkedTransferCodingLineTerminatorSet) {
+        if (!isStrictChunkedTransferCodingLineTerminator) {
             // first msg
             result = resultQueue.poll(5, SECONDS);
             assertTrue(result.get(2, SECONDS));
