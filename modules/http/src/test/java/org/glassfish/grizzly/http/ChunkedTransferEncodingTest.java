@@ -370,13 +370,13 @@ public class ChunkedTransferEncodingTest {
               .append(eol)
               .append("Host: localhost:")
               .append(PORT)
-              .append(eol)
+              .append("\r\n")
               .append("Transfer-encoding: chunked")
-              .append(eol)
-              .append("Content-Type: application/x-www-form-urlencoded").append(eol);
+              .append("\r\n")
+              .append("Content-Type: application/x-www-form-urlencoded").append("\r\n");
 
             if (i == packetsNum - 1) {
-                sb.append("Connection: close").append(eol);
+                sb.append("Connection: close").append("\r\n");
             }
 
             sb.append(eol);
@@ -390,7 +390,7 @@ public class ChunkedTransferEncodingTest {
             for (Entry<String, Pair<String, String>> entry : trailerHeaders.entrySet()) {
                 final String value = entry.getValue().getFirst();
                 if (value != null) {
-                    sb.append(entry.getKey()).append(": ").append(value).append(eol);
+                    sb.append(entry.getKey()).append(": ").append(value).append("\r\n");
                 }
             }
 
