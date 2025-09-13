@@ -150,6 +150,7 @@ public class HttpRequestParseTest {
         headers.put("Trailing-OWS-Header1", new Pair<>("some-value  ", "some-value"));
         headers.put("Trailing-OWS-Header2", new Pair<>("some-value\t\t", "some-value"));
         headers.put("OWS-Header", new Pair<>(" \t \t some-value \t \t ", "some-value"));
+        headers.put("Mixed-OWS-Header", new Pair<>(" \t \t some- \t \t value \t \t ", "some- \t \t value"));
         doHttpRequestTest("POST", "/index.html", "HTTP/1.1", headers, "\r\n");
     }
 
