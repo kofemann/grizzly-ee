@@ -18,6 +18,7 @@
 package org.glassfish.grizzly.http;
 
 import static org.glassfish.grizzly.http.util.HttpCodecUtils.checkEOL;
+import static org.glassfish.grizzly.http.util.HttpCodecUtils.isSpaceOrTab;
 import static org.glassfish.grizzly.http.util.HttpCodecUtils.put;
 import static org.glassfish.grizzly.http.util.HttpCodecUtils.skipSpaces;
 import static org.glassfish.grizzly.utils.Charsets.ASCII_CHARSET;
@@ -869,7 +870,7 @@ public abstract class HttpCodecFilter extends HttpBaseFilter implements Monitori
                     // Check if it's not multi line header
                     if (offset + 1 < limit) {
                         final byte b2 = input[offset + 1];
-                        if (b2 == Constants.SP || b2 == Constants.HT) {
+                        if (isSpaceOrTab(b2)) {
                             input[arrayOffs + parsingState.checkpoint++] = b2;
                             parsingState.offset = offset + 2 - arrayOffs;
                             return -2;
@@ -884,7 +885,7 @@ public abstract class HttpCodecFilter extends HttpBaseFilter implements Monitori
                     parsingState.offset = offset - arrayOffs;
                     return -1;
                 }
-            } else if (b == Constants.SP) {
+            } else if (isSpaceOrTab(b)) {
                 if (hasShift) {
                     input[arrayOffs + parsingState.checkpoint++] = b;
                 } else {
@@ -1160,7 +1161,7 @@ public abstract class HttpCodecFilter extends HttpBaseFilter implements Monitori
                     // Check if it's not multi line header
                     if (offset + 1 < limit) {
                         final byte b2 = input.get(offset + 1);
-                        if (b2 == Constants.SP || b2 == Constants.HT) {
+                        if (isSpaceOrTab(b2)) {
                             input.put(parsingState.checkpoint++, b2);
                             parsingState.offset = offset + 2;
                             return -2;
@@ -1175,7 +1176,7 @@ public abstract class HttpCodecFilter extends HttpBaseFilter implements Monitori
                     parsingState.offset = offset;
                     return -1;
                 }
-            } else if (b == Constants.SP) {
+            } else if (isSpaceOrTab(b)) {
                 if (hasShift) {
                     input.put(parsingState.checkpoint++, b);
                 } else {

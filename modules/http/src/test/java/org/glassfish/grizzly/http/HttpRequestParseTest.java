@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
  * Copyright (c) 2010, 2024 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -138,6 +139,19 @@ public class HttpRequestParseTest {
         headers.put("Host", new Pair<>("localhost", "localhost"));
         headers.put("Content-length", new Pair<>("2345", "2345"));
         doHttpRequestTest("POST", "/index.html", "HTTP/1.1", headers, "\r\n", true);
+    }
+
+    @Test
+    public void testLeadingOrTrailingWhitespaceFromHeaderContentValues() throws Exception {
+        Map<String, Pair<String, String>> headers = new HashMap<>();
+        headers.put("Host", new Pair<>("localhost", "localhost"));
+        headers.put("Leading-OWS-Header1", new Pair<>("  some-value", "some-value"));
+        headers.put("Leading-OWS-Header2", new Pair<>("\t\tsome-value", "some-value"));
+        headers.put("Trailing-OWS-Header1", new Pair<>("some-value  ", "some-value"));
+        headers.put("Trailing-OWS-Header2", new Pair<>("some-value\t\t", "some-value"));
+        headers.put("OWS-Header", new Pair<>(" \t \t some-value \t \t ", "some-value"));
+        headers.put("Mixed-OWS-Header", new Pair<>(" \t \t some- \t \t value \t \t ", "some- \t \t value"));
+        doHttpRequestTest("POST", "/index.html", "HTTP/1.1", headers, "\r\n");
     }
 
     @Test
