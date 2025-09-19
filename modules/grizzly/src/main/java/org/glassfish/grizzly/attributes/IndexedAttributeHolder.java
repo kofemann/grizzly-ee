@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
  * Copyright (c) 2008, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -75,7 +76,7 @@ public final class IndexedAttributeHolder implements AttributeHolder {
             return indexedAttributeAccessor.getAttribute(attribute.index(), initializer);
         }
 
-        return initializer != null ? initializer : null;
+        return initializer != null ? initializer.get() : null;
     }
 
     /**
