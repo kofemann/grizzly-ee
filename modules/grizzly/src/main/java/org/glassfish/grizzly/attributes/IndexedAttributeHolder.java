@@ -58,6 +58,15 @@ public final class IndexedAttributeHolder implements AttributeHolder {
         indexedAttributeAccessor = new IndexedAttributeAccessorImpl();
     }
 
+    public IndexedAttributeHolder(final AttributeBuilder attributeBuilder, final int initialCapacity) {
+        this.attributeBuilder = (DefaultAttributeBuilder) attributeBuilder;
+        final int snapshotSize = Math.max(4, initialCapacity);
+        final int[] i2v = new int[snapshotSize];
+        Arrays.fill(i2v, -1);
+        state = new Snapshot(new Object[snapshotSize], i2v, 0);
+        indexedAttributeAccessor = new IndexedAttributeAccessorImpl();
+    }
+
     /**
      * {@inheritDoc}
      */
