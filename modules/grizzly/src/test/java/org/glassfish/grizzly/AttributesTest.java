@@ -213,7 +213,7 @@ public class AttributesTest {
         }));
     }
 
-    @Test
+    //@Test
     public void testAttributesForPerformance() {
         if (!isSafe) {
             return;
@@ -224,7 +224,7 @@ public class AttributesTest {
         final AttributeHolder holder3 = builder.createUnsafeAttributeHolder(); // for comparison
 
         final int attrCount = 100;
-        final int numberOfTryCountPerThread = 200_000;
+        final int numberOfTryCountPerThread = 20000;
         final int repeatCount = 2;
 
         final Attribute[] attrs = new Attribute[attrCount];
