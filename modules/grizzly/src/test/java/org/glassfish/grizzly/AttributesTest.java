@@ -39,6 +39,7 @@ import org.glassfish.grizzly.attributes.AttributeBuilder;
 import org.glassfish.grizzly.attributes.AttributeHolder;
 import org.glassfish.grizzly.attributes.DefaultAttributeBuilder;
 import org.glassfish.grizzly.attributes.IndexedAttributeHolder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -213,7 +214,8 @@ public class AttributesTest {
         }));
     }
 
-    //@Test
+    @Test
+    @Ignore("Performance test")
     public void testAttributesForPerformance() {
         if (!isSafe) {
             return;
