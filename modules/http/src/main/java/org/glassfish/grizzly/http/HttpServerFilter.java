@@ -39,8 +39,8 @@ import org.glassfish.grizzly.http.Method.PayloadExpectation;
 import org.glassfish.grizzly.http.util.Constants;
 import org.glassfish.grizzly.http.util.ContentType;
 import org.glassfish.grizzly.http.util.DataChunk;
-import org.glassfish.grizzly.http.util.FastHttpDateFormat;
 import org.glassfish.grizzly.http.util.Header;
+import org.glassfish.grizzly.http.util.HttpDateFormat;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.grizzly.http.util.HttpUtils;
 import org.glassfish.grizzly.http.util.MimeHeaders;
@@ -875,7 +875,7 @@ public class HttpServerFilter extends HttpCodecFilter {
         }
 
         if (!response.containsHeader(Header.Date)) {
-            response.getHeaders().addValue(Header.Date).setBytes(FastHttpDateFormat.getCurrentDateBytes());
+            response.getHeaders().addValue(Header.Date).setBytes(HttpDateFormat.getCurrentDateBytes());
         }
 
         final ProcessingState state = response.getProcessingState();
