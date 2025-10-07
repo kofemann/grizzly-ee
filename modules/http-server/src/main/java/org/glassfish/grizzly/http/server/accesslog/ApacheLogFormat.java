@@ -775,7 +775,7 @@ public class ApacheLogFormat implements AccessLogFormat {
             }
 
             final DateTimeFormatter format = dateTimeFormatter.withZone(timeZone);
-            return builder.append(format.format(Instant.ofEpochMilli(timeStamp.getTime())));
+            return builder.append(format.format(timeStamp.toInstant()));
         }
 
         @Override

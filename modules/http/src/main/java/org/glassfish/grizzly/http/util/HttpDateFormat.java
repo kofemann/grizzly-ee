@@ -67,12 +67,12 @@ public final class HttpDateFormat {
     /**
      * Current formatted date as byte[].
      */
-    private static volatile byte[] currentDateBytes;
+    private static byte[] currentDateBytes;
 
     /**
      * Current formatted date.
      */
-    private static volatile String cachedStringDate;
+    private static String cachedStringDate;
     private static volatile byte[] dateBytesForCachedStringDate;
 
     /**
@@ -109,11 +109,22 @@ public final class HttpDateFormat {
     public static byte[] getCurrentDateBytes() {
         final long now = System.currentTimeMillis();
         final long diff = now - nextGeneration;
-        if (diff > 0 && (diff > 5000 || isGeneratingNow.compareAndSet(false, true))) {
+
+        // if the next generation time is not reached, or it is reached within 5 seconds and another thread is
+        // generating the current date, return the cached value.
+        if (diff < 0 || (diff < 5000 && isGeneratingNow.get())) {
+            return currentDateBytes;
+        }
+
+        // otherwise, try to generate the current date.
+        while (!isGeneratingNow.compareAndSet(false, true)) {
+            Thread.onSpinWait();
+        }
+        if (now > nextGeneration) {
             currentDateBytes = toCheckedByteArray(new StringBuilder(FORMATTER.format(Instant.ofEpochMilli(now))));
             nextGeneration = now + 1000;
-            isGeneratingNow.set(false);
         }
+        isGeneratingNow.set(false);
         return currentDateBytes;
     }
 

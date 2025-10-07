@@ -36,18 +36,18 @@ public final class DateTimeFormatters {
         return new DateTimeFormatters();
     }
 
-    private final DateTimeFormatter[] f;
+    private final DateTimeFormatter[] formatters;
 
-    public DateTimeFormatters() {
+    private DateTimeFormatters() {
         final ZoneId zoneId = ZoneId.of("GMT");
-        f = new DateTimeFormatter[]{
+        formatters = new DateTimeFormatter[]{
                 DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US).withZone(zoneId),
                 DateTimeFormatter.ofPattern("EEE, dd-MMM-yy HH:mm:ss zzz", Locale.US).withZone(zoneId),
                 DateTimeFormatter.ofPattern("EEE MMMM d HH:mm:ss yyyy", Locale.US).withZone(zoneId)};
     }
 
     public DateTimeFormatter[] getFormats() {
-        return f;
+        return formatters;
     }
 
     public void recycle() {

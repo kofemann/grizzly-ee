@@ -39,6 +39,7 @@ import static org.junit.Assert.fail;
 public class HttpDateFormatTest {
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testHttpDateFormat() {
         final long now = Instant.now().toEpochMilli();
         assertEquals(FastHttpDateFormat.formatDate(now, null), HttpDateFormat.formatDate(now, null));
@@ -103,6 +104,7 @@ public class HttpDateFormatTest {
 
     @Test
     @Ignore("Performance test")
+    @SuppressWarnings("deprecation")
     public void testHttpDateFormatForPerformance() {
         final int repeatCount = 2;
         int numberOfThreads = 512;
