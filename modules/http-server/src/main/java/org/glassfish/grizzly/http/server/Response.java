@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2024, 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2008, 2020 Oracle and/or its affiliates. All rights reserved.
  * Copyright 2004 The Apache Software Foundation
  *
@@ -26,12 +26,12 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -58,9 +58,9 @@ import org.glassfish.grizzly.http.server.util.HtmlHelper;
 import org.glassfish.grizzly.http.util.CharChunk;
 import org.glassfish.grizzly.http.util.ContentType;
 import org.glassfish.grizzly.http.util.CookieSerializerUtils;
-import org.glassfish.grizzly.http.util.FastHttpDateFormat;
 import org.glassfish.grizzly.http.util.Header;
 import org.glassfish.grizzly.http.util.HeaderValue;
+import org.glassfish.grizzly.http.util.HttpDateFormat;
 import org.glassfish.grizzly.http.util.HttpRequestURIDecoder;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.grizzly.http.util.MimeHeaders;
@@ -110,7 +110,7 @@ public class Response {
     /**
      * The date format we will use for creating date headers.
      */
-    protected SimpleDateFormat format = null;
+    protected DateTimeFormatter format = null;
 
     /**
      * Descriptive information about this Response implementation.
@@ -1019,11 +1019,10 @@ public class Response {
         }
 
         if (format == null) {
-            format = new SimpleDateFormat(HTTP_RESPONSE_DATE_HEADER, Locale.US);
-            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            format = DateTimeFormatter.ofPattern(HTTP_RESPONSE_DATE_HEADER, Locale.US).withZone(ZoneId.of("GMT"));
         }
 
-        addHeader(name, FastHttpDateFormat.formatDate(value, format));
+        addHeader(name, HttpDateFormat.formatDate(value, format));
 
     }
 
@@ -1042,11 +1041,10 @@ public class Response {
         }
 
         if (format == null) {
-            format = new SimpleDateFormat(HTTP_RESPONSE_DATE_HEADER, Locale.US);
-            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            format = DateTimeFormatter.ofPattern(HTTP_RESPONSE_DATE_HEADER, Locale.US).withZone(ZoneId.of("GMT"));
         }
 
-        addHeader(header, FastHttpDateFormat.formatDate(value, format));
+        addHeader(header, HttpDateFormat.formatDate(value, format));
 
     }
 
@@ -1331,11 +1329,10 @@ public class Response {
         }
 
         if (format == null) {
-            format = new SimpleDateFormat(HTTP_RESPONSE_DATE_HEADER, Locale.US);
-            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            format = DateTimeFormatter.ofPattern(HTTP_RESPONSE_DATE_HEADER, Locale.US).withZone(ZoneId.of("GMT"));
         }
 
-        setHeader(name, FastHttpDateFormat.formatDate(value, format));
+        setHeader(name, HttpDateFormat.formatDate(value, format));
 
     }
 
@@ -1355,11 +1352,10 @@ public class Response {
         }
 
         if (format == null) {
-            format = new SimpleDateFormat(HTTP_RESPONSE_DATE_HEADER, Locale.US);
-            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            format = DateTimeFormatter.ofPattern(HTTP_RESPONSE_DATE_HEADER, Locale.US).withZone(ZoneId.of("GMT"));
         }
 
-        setHeader(header, FastHttpDateFormat.formatDate(value, format));
+        setHeader(header, HttpDateFormat.formatDate(value, format));
 
     }
 

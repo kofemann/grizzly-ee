@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
  * Copyright (c) 2007, 2020 Oracle and/or its affiliates. All rights reserved.
  * Copyright 2004 The Apache Software Foundation
  *
@@ -39,6 +40,7 @@ import org.glassfish.grizzly.utils.Charsets;
  * @author Gustav Trede
  * @author Remy Maucherat
  */
+@Deprecated
 public final class FastHttpDateFormat {
 
     private static final String ASCII_CHARSET_NAME = Charsets.ASCII_CHARSET.name();
