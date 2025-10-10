@@ -174,8 +174,8 @@ public final class FastHttpDateFormat {
 
     /**
      * Get the HTTP format of the specified date.<br>
-     * http spec only requre second precision http://tools.ietf.org/html/rfc2616#page-20 <br>
-     * therefore we dont use the millisecond precision , but second . truncation is done in the same way for second
+     * http spec only require second precision http://tools.ietf.org/html/rfc2616#page-20 <br>
+     * therefore we don't use the millisecond precision , but second . truncation is done in the same way for second
      * precision in SimpleDateFormat:<br>
      * (999 millisec. = 0 sec.)
      * 
