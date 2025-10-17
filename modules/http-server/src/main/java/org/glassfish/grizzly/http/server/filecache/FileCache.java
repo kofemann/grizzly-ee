@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation.
  * Copyright (c) 2010, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -41,10 +42,10 @@ import org.glassfish.grizzly.http.CompressionConfig;
 import org.glassfish.grizzly.http.HttpRequestPacket;
 import org.glassfish.grizzly.http.HttpResponsePacket;
 import org.glassfish.grizzly.http.Method;
-import org.glassfish.grizzly.http.server.util.SimpleDateFormats;
+import org.glassfish.grizzly.http.server.util.DateTimeFormatters;
 import org.glassfish.grizzly.http.util.ContentType;
-import org.glassfish.grizzly.http.util.FastHttpDateFormat;
 import org.glassfish.grizzly.http.util.Header;
+import org.glassfish.grizzly.http.util.HttpDateFormat;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.grizzly.http.util.MimeHeaders;
 import org.glassfish.grizzly.localization.LogMessages;
@@ -973,11 +974,11 @@ public class FileCache implements MonitoringAware<FileCacheProbe> {
             return -1L;
         }
 
-        final SimpleDateFormats formats = SimpleDateFormats.create();
+        final DateTimeFormatters formats = DateTimeFormatters.create();
 
         try {
             // Attempt to convert the date header in a variety of formats
-            long result = FastHttpDateFormat.parseDate(dateHeader, formats.getFormats());
+            long result = HttpDateFormat.parseDate(dateHeader, formats.getFormats());
             if (result != -1L) {
                 return result;
             }

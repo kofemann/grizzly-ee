@@ -22,19 +22,23 @@ jobs:
 
     strategy:
       matrix:
-        java_version: [ 11 ]
+        java_version: [ 21 ]
 
     steps:
     - name: Checkout for build
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java_version }}
+    - name: Install Maven
+      run: |
+        curl -o ./apache-maven-3.9.9-bin.tar.gz https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.9/apache-maven-3.9.9-bin.tar.gz
+        tar -xf ./apache-maven-3.9.9-bin.tar.gz
     - name: Maven Build
       run: |
-        mvn --show-version \
+        ./apache-maven-3.9.9/bin/mvn --show-version \
             --no-transfer-progress \
             --activate-profiles staging \
             --define skipTests=true \
@@ -47,19 +51,23 @@ jobs:
 
     strategy:
       matrix:
-        java_version: [ 11 ]
+        java_version: [ 21 ]
 
     steps:
     - name: Checkout for build
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java_version }}
+    - name: Install Maven
+      run: |
+        curl -o ./apache-maven-3.9.9-bin.tar.gz https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.9/apache-maven-3.9.9-bin.tar.gz
+        tar -xf ./apache-maven-3.9.9-bin.tar.gz
     - name: Maven Build
       run: |
-        mvn --show-version \
+        ./apache-maven-3.9.9/bin/mvn --show-version \
             --no-transfer-progress \
             --fail-at-end \
             --activate-profiles staging \

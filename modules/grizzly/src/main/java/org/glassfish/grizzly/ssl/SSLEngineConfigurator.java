@@ -107,7 +107,6 @@ public class SSLEngineConfigurator implements SSLEngineFactory {
      * @param wantClientAuth
      */
     public SSLEngineConfigurator(SSLContextConfigurator sslContextConfiguration, boolean clientMode, boolean needClientAuth, boolean wantClientAuth) {
-
         if (sslContextConfiguration == null) {
             throw new IllegalArgumentException("SSLContextConfigurator can not be null");
         }
@@ -133,6 +132,7 @@ public class SSLEngineConfigurator implements SSLEngineFactory {
     }
 
     protected SSLEngineConfigurator() {
+        this.sslParameters = new SSLParameters();
     }
 
     /**
@@ -183,7 +183,7 @@ public class SSLEngineConfigurator implements SSLEngineFactory {
 
         SSLParameters params = copy(sslParameters);
 
-        String[] enabledCipherSuites = params.getProtocols();
+        String[] enabledCipherSuites = params.getCipherSuites();
         if (enabledCipherSuites != null) {
             enabledCipherSuites = configureEnabledCiphers(sslEngine, enabledCipherSuites);
             params.setCipherSuites(enabledCipherSuites);
@@ -307,7 +307,7 @@ public class SSLEngineConfigurator implements SSLEngineFactory {
 
     /**
      * Return the list of allowed protocol.
-     * 
+     *
      * @return String[] an array of supported protocols.
      */
     private static String[] configureEnabledProtocols(SSLEngine sslEngine, String[] requestedProtocols) {
