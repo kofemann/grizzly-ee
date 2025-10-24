@@ -34,7 +34,7 @@
     <packaging>pom</packaging>
 
     <name>grizzly-project</name>
-    <url>https://projects.eclipse.org/projects/ee4j.grizzly</url>
+    <url>https://projects.eclipse.org/projects/ee4j.glassfish</url>
     <organization>
         <name>Oracle Corporation</name>
         <url>http://www.oracle.com</url>
