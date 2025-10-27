@@ -331,6 +331,18 @@ public class ParametersTest {
         params.processParameters(request);
     }
 
+    @Test
+    public void testFirstAmpersandParameters() {
+        final Parameters params = new Parameters();
+        final byte[] data = new byte[]{(byte) '&', (byte) 'k', (byte) '=', (byte) 'v'};
+        // ignore the first ampersand and parse the rest
+        params.processParameters(Buffers.wrap(MemoryManager.DEFAULT_MEMORY_MANAGER, data), 0, data.length);
+        final Set<String> names = params.getParameterNames();
+        assertNotNull(names);
+        assertEquals(1, names.size());
+        assertEquals("v", params.getParameter("k"));
+    }
+
     private void validateParameters(Parameter[] parameters, Parameters p) {
         Iterator<String> names = p.getParameterNames().iterator();
 
