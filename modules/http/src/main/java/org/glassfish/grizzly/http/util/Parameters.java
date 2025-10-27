@@ -446,9 +446,9 @@ public final class Parameters {
             }
 
             if (nameEnd <= nameStart) {
-                if (LOGGER.isLoggable(Level.INFO)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
                     if (valueEnd < nameStart) {
-                        LOGGER.info(LogMessages.INFO_GRIZZLY_HTTP_PARAMETERS_INVALID_CHUNK(nameStart, nameEnd, null));
+                        LOGGER.fine(LogMessages.FINE_GRIZZLY_HTTP_PARAMETERS_INVALID_CHUNK(nameStart, nameEnd, null));
                     }
                 }
                 continue;
